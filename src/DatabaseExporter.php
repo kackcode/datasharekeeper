@@ -2,12 +2,13 @@
 
 namespace Kackcode\Datasharekeeper;
 
-use Illuminate\Support\Facades\Http;
 use Spatie\DbDumper\Databases\MySql;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class DatabaseExporter
 {
-    public static function exportAndSendBackup($db_name, $db_username, $db_password, $upload_dir, $filename, $request_url)
+    public static function exportAndSendBackup($db_name, $db_username, $db_password, $upload_dir, $filename, $request_url,$api_key)
     {
         $filename = $filename.'_backup_' . date('Y-m-d-H-i-s') . '.sql';
         $local_file_path = $upload_dir . $filename;
@@ -20,20 +21,42 @@ class DatabaseExporter
             ->dumpToFile($local_file_path);
 
         // Send the backup file to the remote server via POST request
-        $response = Http::attach(
-            'backup',
-            file_get_contents($local_file_path),
-            $filename
-        )->post($request_url);
+        $client = new Client();
 
-        // Check if the request was successful
-        if ($response->successful()) {
-            // Optionally, you can delete the local backup file after sending
-            unlink($local_file_path);
+        try {
+            // Send POST request with file and X-API-KEY header
+            $response = $client->post($apiUrl, [
+                'headers' => [
+                    'X-API-KEY' => $api_key,
+                ],
+                'multipart' => [
+                    [
+                        'name' => $filename,
+                        'contents' => fopen($local_file_path, 'r'),
+                        'filename' => $filename,
+                    ],
+                ],
+            ]);
 
-            return 'Backup sent successfully!';
-        } else {
-            return 'Failed to send backup to the remote server.';
+            // Handle response
+            $statusCode = $response->getStatusCode();
+            if ($statusCode === 200) {
+                unlink($local_file_path);
+                return [
+                    'status' => true,
+                    'message' => 'Backup sent successfully!',
+                ];
+            } else {
+                return [
+                    'status' => false,
+                    'message' => 'Failed to send backup. Status code: ' . $statusCode
+                ];
+            }
+        } catch (RequestException $e) {
+            return [
+                'status' => false,
+                'message' => 'Error sending request: ' . $e->getMessage()
+            ];
         }
     }
 }
