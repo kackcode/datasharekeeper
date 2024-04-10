@@ -7,9 +7,9 @@ use Spatie\DbDumper\Databases\MySql;
 
 class DatabaseExporter
 {
-    public static function exportAndSendBackup($db_name, $db_username, $db_password, $upload_dir, $request_url)
+    public static function exportAndSendBackup($db_name, $db_username, $db_password, $upload_dir, $filename, $request_url)
     {
-        $filename = 'backup_' . date('Y-m-d_H-i-s') . '.sql';
+        $filename = $filename.'_backup_' . date('Y-m-d-H-i-s') . '.sql';
         $local_file_path = $upload_dir . $filename;
 
         // Export the database
