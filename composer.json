@@ -1,0 +1,24 @@
+{
+    "name": "undefined/datasharekeeper",
+    "description": "Welcome to the datasharekeeper",
+    "type": "library",
+    "require": {
+        "php": "^7.2.5|^8.0",
+        "spatie/db-dumper": "^3.5",
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "license": "GNU GENERAL PUBLIC LICENSE",
+    "autoload": {
+        "psr-4": {
+            "Undefined\\Datasharekeeper\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "undefined",
+            "email": "undefined@labdev.local"
+        }
+    ]
+}
