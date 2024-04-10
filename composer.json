@@ -9,7 +9,7 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "license": "GNU GENERAL PUBLIC LICENSE",
+    "license": "GPL-3.0-only",
     "autoload": {
         "psr-4": {
             "Undefined\\Datasharekeeper\\": "src/"
