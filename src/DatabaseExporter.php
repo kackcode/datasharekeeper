@@ -1,6 +1,6 @@
 <?php
 
-namespace Undefined\Datasharekeeper;
+namespace Kackcode\Datasharekeeper;
 
 use Illuminate\Support\Facades\Http;
 use Spatie\DbDumper\Databases\MySQL;
