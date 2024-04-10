@@ -1,5 +1,5 @@
 {
-    "name": "undefined/datasharekeeper",
+    "name": "kackcode/datasharekeeper",
     "description": "Welcome to the datasharekeeper",
     "type": "library",
     "require": {
@@ -12,7 +12,7 @@
     "license": "GPL-3.0-only",
     "autoload": {
         "psr-4": {
-            "Undefined\\Datasharekeeper\\": "src/"
+            "Kackcode\\Datasharekeeper\\": "src/"
         }
     },
     "authors": [
