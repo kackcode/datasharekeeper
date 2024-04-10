@@ -3,7 +3,7 @@
 namespace Kackcode\Datasharekeeper;
 
 use Illuminate\Support\Facades\Http;
-use Spatie\DbDumper\Databases\MySQL;
+use Spatie\DbDumper\Databases\MySql;
 
 class DatabaseExporter
 {
@@ -13,7 +13,7 @@ class DatabaseExporter
         $local_file_path = $upload_dir . $filename;
 
         // Export the database
-        MySQL::create()
+        MySql::create()
             ->setDbName($db_name)
             ->setUserName($db_username)
             ->setPassword($db_password)
