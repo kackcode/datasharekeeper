@@ -8,7 +8,7 @@ use GuzzleHttp\Exception\RequestException;
 
 class DatabaseExporter
 {
-    public static function exportAndSendBackup($db_name, $db_username, $db_password, $upload_dir, $filename, $request_url,$api_key)
+    public static function exportAndSendBackup($db_name, $db_username, $db_password, $upload_dir, $filename, $api_url,$api_key)
     {
         $filename = $filename.'_backup_' . date('Y-m-d-H-i-s') . '.sql';
         $local_file_path = $upload_dir . $filename;
@@ -25,7 +25,7 @@ class DatabaseExporter
 
         try {
             // Send POST request with file and X-API-KEY header
-            $response = $client->post($apiUrl, [
+            $response = $client->post($api_url, [
                 'headers' => [
                     'X-API-KEY' => $api_key,
                 ],
