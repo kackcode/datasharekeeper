@@ -8,7 +8,7 @@ use GuzzleHttp\Exception\RequestException;
 class EmailSaver extends BaseKeeper {
 
 
-    public function saveItNow($endpoint, $data)
+    public function saveItNow($data)
     {
         try {
             $response = $this->httpClient->post($this->apiUrl, [
