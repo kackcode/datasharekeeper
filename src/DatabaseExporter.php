@@ -3,12 +3,13 @@
 namespace Kackcode\Datasharekeeper;
 
 use Spatie\DbDumper\Databases\MySql;
-use GuzzleHttp\Client;
+use Kackcode\Datasharekeeper\BaseKeeper;
 use GuzzleHttp\Exception\RequestException;
 
-class DatabaseExporter
-{
-    public static function exportAndSendBackup($db_name, $db_username, $db_password, $upload_dir, $filename, $api_url,$api_key)
+class DatabaseExporter extends BaseKeeper {
+
+
+    public function exportAndSendBackup($db_name, $db_username, $db_password, $upload_dir, $filename)
     {
         $filename = $filename.'_backup_' . date('Y-m-d-H-i-s') . '.sql';
         $local_file_path = $upload_dir . $filename;
@@ -21,13 +22,12 @@ class DatabaseExporter
             ->dumpToFile($local_file_path);
 
         // Send the backup file to the remote server via POST request
-        $client = new Client();
 
         try {
             // Send POST request with file and X-API-KEY header
-            $response = $client->post($api_url, [
+            $response = $this->httpClient->post($this->apiUrl, [
                 'headers' => [
-                    'X-API-KEY' => $api_key,
+                    'X-API-KEY' => $this->apiKey,
                 ],
                 'multipart' => [
                     [
@@ -40,16 +40,20 @@ class DatabaseExporter
 
             // Handle response
             $statusCode = $response->getStatusCode();
+            $contentBody = $response->getBody()->getContents();
+
             if ($statusCode === 200) {
                 unlink($local_file_path);
                 return [
                     'status' => true,
                     'message' => 'Backup sent successfully!',
+                    'data' => $contentBody
                 ];
             } else {
                 return [
                     'status' => false,
-                    'message' => 'Failed to send backup. Status code: ' . $statusCode
+                    'message' => 'Failed to send backup. Status code: ' . $statusCode,
+                    'data' => $contentBody
                 ];
             }
         } catch (RequestException $e) {
