@@ -10,7 +10,7 @@ class BaseKeeper {
     protected $apiUrl;
     protected $httpClient;
 
-    protected function __construct($apiKey,$apiUrl)
+    public function __construct($apiKey,$apiUrl)
     {
         $this->apiKey = $apiKey;
         $this->apiUrl = $apiUrl;
